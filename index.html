@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Aayush Khanna — Software Engineer</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHRleHQgeD0iMzIiIHk9IjQ2IiBmb250LWZhbWlseT0iSmV0QnJhaW5zIE1vbm8sIG1vbm9zcGFjZSIgZm9udC1zaXplPSIzOCIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iIzRGRDFDNSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+QUs8L3RleHQ+PC9zdmc+">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -108,7 +109,10 @@
     transition:left .3s cubic-bezier(.4,0,.2,1), width .3s cubic-bezier(.4,0,.2,1);
     box-shadow:0 0 6px var(--cyan);
   }
-  @media (max-width:640px){ .navlinks{ gap:14px; } .navlinks a{ font-size:11px; } .nav-indicator{ display:none; } }
+  @media (max-width:640px){
+    .navlinks{ display:none; }
+    nav.wrap{ justify-content:space-between; }
+  }
 
   /* ---------- HERO ---------- */
   .hero{ padding:100px 0 70px; position:relative; overflow:hidden; }
@@ -322,7 +326,7 @@
   .projects .card:nth-child(3) ul{ max-width:640px; }
   .card{
     border:1px solid var(--border); border-radius:10px; background:var(--bg-panel);
-    padding:26px; display:flex; flex-direction:column; gap:16px;
+    padding:26px; display:flex; flex-direction:column; gap:16px; cursor:pointer;
     transition:border-color .25s ease, opacity .25s ease, transform .1s ease-out;
     transform-style:preserve-3d; will-change:transform;
   }
@@ -342,7 +346,48 @@
   .rs-dot{ width:6px; height:6px; border-radius:50%; background:var(--text-tertiary); flex:none; }
   .rs-dot.live{ background:var(--cyan); box-shadow:0 0 6px var(--cyan); animation:blink 2s ease-in-out infinite; }
   .rs-dot.err{ background:var(--amber); }
-  .card-links{ display:flex; gap:10px; margin-top:auto; padding-top:6px; }
+  .card-links{ display:flex; gap:10px; margin-top:auto; padding-top:6px; align-items:center; }
+  .card-detail-hint{
+    font-family:var(--font-mono); font-size:12.5px; color:var(--text-tertiary);
+    margin-left:auto; transition:color .2s ease;
+  }
+  .card:hover .card-detail-hint{ color:var(--cyan); }
+
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(6,8,12,0.78); backdrop-filter:blur(4px);
+    z-index:110; display:flex; align-items:center; justify-content:center; padding:24px;
+    opacity:0; pointer-events:none; transition:opacity .2s ease;
+  }
+  .modal-overlay.open{ opacity:1; pointer-events:auto; }
+  .modal-box{
+    width:100%; max-width:680px; max-height:84vh; overflow-y:auto;
+    background:var(--bg-panel); border:1px solid var(--border); border-radius:14px;
+    padding:36px 40px; position:relative;
+    transform:translateY(14px); transition:transform .2s ease;
+  }
+  .modal-overlay.open .modal-box{ transform:translateY(0); }
+  .modal-close{
+    position:absolute; top:18px; right:18px; width:32px; height:32px; border-radius:50%;
+    border:1px solid var(--border); background:var(--bg); color:var(--text-secondary);
+    cursor:pointer; font-size:14px; transition:border-color .2s ease, color .2s ease;
+  }
+  .modal-close:hover{ border-color:var(--cyan); color:var(--cyan); }
+  .modal-body h3{ font-family:var(--font-display); font-size:26px; font-weight:700; margin-bottom:6px; }
+  .modal-body .modal-stack{ font-family:var(--font-mono); font-size:12.5px; color:var(--amber); margin-bottom:24px; }
+  .modal-body .modal-section{ margin-bottom:20px; }
+  .modal-body .modal-label{
+    font-family:var(--font-mono); font-size:11.5px; color:var(--cyan); text-transform:uppercase;
+    letter-spacing:0.06em; margin-bottom:8px;
+  }
+  .modal-body p{ color:var(--text-secondary); font-size:14.5px; line-height:1.7; }
+  .modal-links{ display:flex; gap:10px; margin-top:28px; flex-wrap:wrap; }
+  .modal-links a{
+    font-family:var(--font-mono); font-size:13px; color:var(--cyan);
+    border:1px solid var(--border); padding:8px 14px; border-radius:6px;
+    transition:border-color .2s ease, background .2s ease;
+  }
+  .modal-links a:hover{ border-color:var(--cyan); background:var(--cyan-dim); }
+  @media (max-width:600px){ .modal-box{ padding:28px 22px; } }
 
   /* ---------- command palette ---------- */
   .cmdk-hint{
@@ -352,7 +397,11 @@
   }
   .cmdk-hint:hover{ border-color:var(--cyan); color:var(--cyan); }
   .cmdk-hint kbd{ font-family:inherit; }
-  @media (max-width:640px){ .cmdk-hint{ display:none; } }
+  @media (max-width:640px){
+    .cmdk-hint{ padding:6px 8px; font-size:0; }
+    .cmdk-hint::before{ content:'/'; font-size:13px; }
+    .cmdk-hint kbd{ display:none; }
+  }
 
   .cmdk-overlay{
     position:fixed; inset:0; background:rgba(6,8,12,0.72); backdrop-filter:blur(3px);
@@ -384,6 +433,7 @@
   .cmdk-item.active{ background:var(--cyan-dim); color:var(--cyan); }
   .cmdk-item.active .cmdk-idx{ color:var(--cyan); }
   .cmdk-empty{ padding:20px; text-align:center; font-family:var(--font-mono); font-size:13px; color:var(--text-tertiary); }
+
 
   .card-links a{
     font-family:var(--font-mono); font-size:12.5px; color:var(--cyan);
@@ -657,7 +707,7 @@
   <section id="projects" class="wrap">
     <div class="sec-head reveal"><span class="tag">// 04</span><h2>Projects</h2></div>
     <div class="projects" id="projectsGrid">
-      <div class="card reveal" data-tags="react,node.js,express.js,mongodb,docker,javascript" data-repo="Aayush101004/career-tracker">
+      <div class="card reveal" data-tags="react,node.js,express.js,mongodb,docker,javascript" data-repo="Aayush101004/career-tracker" data-project="stepwise">
         <div class="card-top"><h3>StepWise</h3></div>
         <div class="stack">MERN · JWT · Docker · Multer</div>
         <ul>
@@ -669,9 +719,10 @@
         <div class="card-links">
           <a href="https://github.com/Aayush101004/career-tracker" target="_blank" rel="noopener">GitHub →</a>
           <a href="https://career-tracker-two.vercel.app/" target="_blank" rel="noopener">Live on Vercel →</a>
+          <span class="card-detail-hint">View case study →</span>
         </div>
       </div>
-      <div class="card reveal" data-tags="react,tailwind,javascript" data-repo="Aayush101004/gen_chatbot_next">
+      <div class="card reveal" data-tags="react,tailwind,javascript" data-repo="Aayush101004/gen_chatbot_next" data-project="purplebot">
         <div class="card-top"><h3>PurpleBot</h3></div>
         <div class="stack">React.js · Tailwind CSS · API</div>
         <ul>
@@ -682,9 +733,10 @@
         <div class="card-links">
           <a href="https://github.com/Aayush101004/gen_chatbot_next" target="_blank" rel="noopener">GitHub →</a>
           <a href="https://gen-chatbot-next.vercel.app/" target="_blank" rel="noopener">Live on Vercel →</a>
+          <span class="card-detail-hint">View case study →</span>
         </div>
       </div>
-      <div class="card reveal" data-tags="react,python,tensorflow,scikit-learn,pandas,numpy" data-repo="Aayush101004/SmartRentalMaachine-main">
+      <div class="card reveal" data-tags="react,python,tensorflow,scikit-learn,pandas,numpy" data-repo="Aayush101004/SmartRentalMaachine-main" data-project="smartrental">
         <div class="card-top"><h3>Smart Rental Website</h3></div>
         <div class="stack">React.js · Python · Flask · TensorFlow</div>
         <ul>
@@ -695,10 +747,18 @@
         <div class="repo-stats" data-repo-stats><span class="rs-dot"></span><span class="rs-text">fetching repo stats…</span></div>
         <div class="card-links">
           <a href="https://github.com/Aayush101004/SmartRentalMaachine-main" target="_blank" rel="noopener">GitHub →</a>
+          <span class="card-detail-hint">View case study →</span>
         </div>
       </div>
     </div>
   </section>
+
+  <div class="modal-overlay" id="projectModal" role="dialog" aria-modal="true" aria-label="Project case study">
+    <div class="modal-box">
+      <button class="modal-close" id="modalClose" aria-label="Close case study">✕</button>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
 
   <section id="extracurricular" class="wrap">
     <div class="sec-head reveal"><span class="tag">// 05</span><h2>Extracurricular</h2></div>
@@ -971,10 +1031,11 @@
       .then(function(data){
         var dot = slot.querySelector('.rs-dot');
         dot.classList.add('live');
-        slot.querySelector('.rs-text').innerHTML =
-          '<span style="color:var(--text-secondary)">&#9733; '+data.stargazers_count+'</span>'+
-          (data.language ? ' · '+data.language : '') +
-          ' · updated '+timeAgo(data.pushed_at);
+        var parts = [];
+        if(data.stargazers_count > 0) parts.push('<span style="color:var(--text-secondary)">&#9733; '+data.stargazers_count+'</span>');
+        if(data.language) parts.push(data.language);
+        parts.push('updated '+timeAgo(data.pushed_at));
+        slot.querySelector('.rs-text').innerHTML = parts.join(' · ');
       })
       .catch(function(){
         var dot = slot.querySelector('.rs-dot');
@@ -1060,6 +1121,60 @@
     else if(e.key === '/' && !typing){ e.preventDefault(); openCmdk(); }
     else if(e.key === 'Escape' && overlay.classList.contains('open')){ closeCmdk(); }
   });
+  /* ---------- project case-study modal ---------- */
+  var projectDetails = {
+    stepwise: {
+      problem: "Job seekers send the same generic resume to every posting and rarely know why it isn't landing interviews.",
+      approach: "Built a MERN app that parses an uploaded resume with pdf-parse and compares it against a specific job description, returning targeted feedback instead of generic tips. Client and server run as separate Docker services via Docker Compose, so the app deploys the same way locally and in production.",
+      outcome: "Live app with a working end-to-end pipeline: upload → parse → job-specific feedback, backed by MongoDB and secured with JWT auth."
+    },
+    purplebot: {
+      problem: "Most chat assistants only do one thing — either conversation or live info — forcing the user to switch tools or specify a mode.",
+      approach: "Combined Google's Gemini API for open-ended conversation with the GNews API for real-time headlines from 50+ sources, then wrote a custom intent-parsing layer in the React UI that automatically routes each message to the right API based on what's being asked.",
+      outcome: "A single chat interface that handles both casual conversation and 'what's happening right now' queries without the user needing to pick a mode."
+    },
+    smartrental: {
+      problem: "Rental businesses need to anticipate demand and catch unusual booking patterns early, not react to them after the fact.",
+      approach: "Built a Flask backend with a proper data science pipeline — scikit-learn and Prophet for demand forecasting, plus anomaly detection on booking data — powering a React frontend that turns the model output into something usable.",
+      outcome: "Full-stack app where the frontend visualizes forecasts and anomalies live with Recharts and maps listings geographically with React-Leaflet."
+    }
+  };
+
+  var projectModal = document.getElementById('projectModal');
+  var modalBody = document.getElementById('modalBody');
+
+  function openProjectModal(card){
+    var key = card.dataset.project;
+    var d = projectDetails[key];
+    if(!d || !modalBody) return;
+    var titleEl = card.querySelector('h3');
+    var stackEl = card.querySelector('.stack');
+    var title = titleEl ? titleEl.textContent : 'Project';
+    var stack = stackEl ? stackEl.textContent : '';
+    var links = Array.prototype.slice.call(card.querySelectorAll('.card-links a')).map(function(a){
+      return '<a href="'+a.getAttribute('href')+'" target="_blank" rel="noopener">'+a.textContent+'</a>';
+    }).join('');
+    modalBody.innerHTML =
+      '<h3>'+title+'</h3>'+
+      '<div class="modal-stack">'+stack+'</div>'+
+      '<div class="modal-section"><div class="modal-label">// problem</div><p>'+d.problem+'</p></div>'+
+      '<div class="modal-section"><div class="modal-label">// approach</div><p>'+d.approach+'</p></div>'+
+      '<div class="modal-section"><div class="modal-label">// outcome</div><p>'+d.outcome+'</p></div>'+
+      '<div class="modal-links">'+links+'</div>';
+    projectModal.classList.add('open');
+  }
+  function closeProjectModal(){ if(projectModal) projectModal.classList.remove('open'); }
+
+  document.querySelectorAll('[data-project]').forEach(function(card){
+    card.addEventListener('click', function(e){
+      if(e.target.closest('a')) return;
+      openProjectModal(card);
+    });
+  });
+  var modalCloseBtn = document.getElementById('modalClose');
+  if(modalCloseBtn) modalCloseBtn.addEventListener('click', closeProjectModal);
+  if(projectModal) projectModal.addEventListener('click', function(e){ if(e.target === projectModal) closeProjectModal(); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeProjectModal(); });
 })();
 </script>
 </body>
