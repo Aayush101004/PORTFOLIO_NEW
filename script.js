@@ -70,7 +70,7 @@
     about: "Final-year CS student at VIT (CGPA 9.18/10). Currently interning at HPE, building automation that finds bugs before customers do.",
     experience: "HPE — Intern (Mar 2026–Present), Bengaluru. CapGemini — Connectivity &amp; Network Intern (May–Jul 2025), Chennai.",
     skills: "Python, C, C++, Java, JavaScript · React, Node.js, Express · PyTest, CMocka, Valgrind · Docker, Git, MongoDB, MySQL",
-    projects: "StepWise (MERN resume feedback tool) · PurpleBot (React + Gemini/GNews chatbot) · Smart Rental Website (React + Flask + TensorFlow forecasting)",
+    projects: "StepWise (MERN resume feedback tool) · PurpleBot (React + Gemini/GNews chatbot) · Smart Rental Website (React + Flask + TensorFlow forecasting) · F1 Telemetry Dashboard (React Three Fiber 3D car explorer)",
     contact: "aayush.khanna2602@gmail.com · linkedin.com/in/aayush-khanna · github.com/Aayush101004",
     whoami: "guest — but you already knew that. Try 'about' to learn who I am.",
     sudo: "Nice try. Permission denied — email me instead."
@@ -244,6 +244,8 @@
     { label: 'PurpleBot — GitHub', cat: 'project', action: function () { openUrl('https://github.com/Aayush101004/gen_chatbot_next'); } },
     { label: 'PurpleBot — Live site', cat: 'project', action: function () { openUrl('https://gen-chatbot-next.vercel.app/'); } },
     { label: 'Smart Rental Website — GitHub', cat: 'project', action: function () { openUrl('https://github.com/Aayush101004/SmartRentalMaachine-main'); } },
+    { label: 'F1 Telemetry Dashboard — GitHub', cat: 'project', action: function () { openUrl('https://github.com/Aayush101004/F1-Telemetry-Dashboard'); } },
+    { label: 'F1 Telemetry Dashboard — Live site', cat: 'project', action: function () { openUrl('https://f1-telemetry-dashboard-nine.vercel.app/'); } },
     { label: 'Email', cat: 'contact', action: function () { openUrl('https://mail.google.com/mail/?view=cm&fs=1&to=aayush.khanna2602@gmail.com'); } },
     { label: 'LinkedIn', cat: 'contact', action: function () { openUrl('https://linkedin.com/in/aayush-khanna-87275824b'); } },
     { label: 'GitHub profile', cat: 'contact', action: function () { openUrl('https://github.com/Aayush101004'); } },
@@ -324,6 +326,11 @@
       problem: "Rental businesses need to anticipate demand and catch unusual booking patterns early, not react to them after the fact.",
       approach: "Built a Flask backend with a proper data science pipeline — scikit-learn and Prophet for demand forecasting, plus anomaly detection on booking data — powering a React frontend that turns the model output into something usable.",
       outcome: "Full-stack app where the frontend visualizes forecasts and anomalies live with Recharts and maps listings geographically with React-Leaflet."
+    },
+    f1telemetry: {
+      problem: "Static specs and exploded diagrams don't really convey how an F1 car's components fit together in 3D space, or what each part actually does.",
+      approach: "Built a real-time 3D F1 car model with React Three Fiber, with orbit and scale controls plus an interactive exploded-view slider. Individual parts — front wing, halo, sidepods, suspension — are selectable and surface technical descriptions and specs on click. Custom HTML overlays are scaled to canvas depth so labels track the 3D geometry instead of breaking the layout.",
+      outcome: "An explorable 3D dashboard with camera controls and canvas styling tuned specifically for studying the car's structure, not just looking at a render of it."
     }
   };
 

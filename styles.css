@@ -884,14 +884,6 @@ section:last-of-type {
   gap: 26px;
 }
 
-.projects .card:nth-child(3) {
-  grid-column: 1 / -1;
-}
-
-.projects .card:nth-child(3) ul {
-  max-width: 640px;
-}
-
 .card {
   border: 1px solid var(--border);
   border-radius: 10px;
