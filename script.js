@@ -8,7 +8,8 @@
     document.addEventListener('mousemove', function (e) { gx = e.clientX; gy = e.clientY; });
     (function loop() {
       cx += (gx - cx) * 0.12; cy += (gy - cy) * 0.12;
-      glow.style.transform = 'translate(' + cx + 'px,' + cy + 'px)';
+      // Appended translate(-50%, -50%) to fix the offset bug
+      glow.style.transform = 'translate(' + cx + 'px, ' + cy + 'px) translate(-50%, -50%)';
       requestAnimationFrame(loop);
     })();
   } else { glow.style.display = 'none'; }
@@ -16,8 +17,8 @@
   /* ---------- typing tagline ---------- */
   var lines = [
     "I build the tools that catch what breaks before it ships.",
-    "80+ bugs automated. 6 raised before they reached production.",
-    "Currently interning at HPE — systems, networks, automation."
+    "118 bugs automated. 8 raised before they reached production.",
+    "Recently interned at HPE — systems, networks, automation."
   ];
   var tEl = document.getElementById('tagline');
   var li = 0, ci = 0, deleting = false;
@@ -46,9 +47,9 @@
     svg.addEventListener('mousemove', function (e) {
       var r = svg.getBoundingClientRect();
       var mx = (e.clientX - r.left) / r.width * W;
-      var myFrac = (e.clientY - r.top) / r.height; // 0 top .. 1 bottom
-      var dir = myFrac < 0.5 ? -1 : 1;             // bump up if cursor is above the line, down if below
-      var amp = 12 + (1 - Math.abs(myFrac - 0.5) * 2) * 26; // stronger bump the closer to the line
+      var myFrac = (e.clientY - r.top) / r.height;
+      var dir = myFrac < 0.5 ? -1 : 1;
+      var amp = 12 + (1 - Math.abs(myFrac - 0.5) * 2) * 26;
       var sigma = 55;
       var pts = [];
       for (var i = 0; i <= N; i++) {
@@ -66,14 +67,16 @@
   var termLog = document.getElementById('termLog');
   var termInput = document.getElementById('termInput');
   var responses = {
-    help: "Available commands: <b>about</b>, <b>experience</b>, <b>skills</b>, <b>projects</b>, <b>contact</b>, <b>whoami</b>, <b>clear</b>",
-    about: "Final-year CS student at VIT (CGPA 9.18/10). Currently interning at HPE, building automation that finds bugs before customers do.",
-    experience: "HPE — Intern (Mar 2026–Present), Bengaluru. CapGemini — Connectivity &amp; Network Intern (May–Jul 2025), Chennai.",
+    help: "Available commands: <b>about</b>, <b>experience</b>, <b>skills</b>, <b>projects</b>, <b>contact</b>, <b>hobbies</b>, <b>stack</b>, <b>whoami</b>, <b>clear</b>",
+    about: "CS graduate from VIT (CGPA 9.18/10). Recently interned at HPE, building automation that finds bugs before customers do.",
+    experience: "HPE — Intern (Mar 2026–Aug 2026), Bengaluru. CapGemini — Connectivity &amp; Network Intern (May–Jul 2025), Chennai.",
     skills: "Python, C, C++, Java, JavaScript · React, Node.js, Express · PyTest, CMocka, Valgrind · Docker, Git, MongoDB, MySQL",
     projects: "StepWise (MERN resume feedback tool) · PurpleBot (React + Gemini/GNews chatbot) · Smart Rental Website (React + Flask + TensorFlow forecasting) · F1 Telemetry Dashboard (React Three Fiber 3D car explorer)",
     contact: "aayush.khanna2602@gmail.com · linkedin.com/in/aayush-khanna · github.com/Aayush101004",
     whoami: "guest — but you already knew that. Try 'about' to learn who I am.",
-    sudo: "Nice try. Permission denied — email me instead."
+    sudo: "Nice try. This incident will be reported.",
+    hobbies: "When I'm out of the IDE, I'm usually practicing Indian classical techniques on my D-natural flute, playing table tennis, or badminton.",
+    stack: "<b>HARDWARE:</b> iPhone, CMF watch, SoundCore Q20i Headphones.<br><b>OFFLINE:</b> Vector X table tennis, Yonex ZR 100 racquets."
   };
   function addLine(html, cls) {
     var d = document.createElement('div');
@@ -310,27 +313,38 @@
     else if (e.key === '/' && !typing) { e.preventDefault(); openCmdk(); }
     else if (e.key === 'Escape' && overlay.classList.contains('open')) { closeCmdk(); }
   });
+
   /* ---------- project case-study modal ---------- */
   var projectDetails = {
     stepwise: {
       problem: "Job seekers send the same generic resume to every posting and rarely know why it isn't landing interviews.",
-      approach: "Built a MERN app that parses an uploaded resume with pdf-parse and compares it against a specific job description, returning targeted feedback instead of generic tips. Client and server run as separate Docker services via Docker Compose, so the app deploys the same way locally and in production.",
-      outcome: "Live app with a working end-to-end pipeline: upload → parse → job-specific feedback, backed by MongoDB and secured with JWT auth."
+      approach: "Built a MERN app that parses an uploaded resume with pdf-parse and compares it against a specific job description, returning targeted feedback instead of generic tips.",
+      hurdle: "PDF parsing is notoriously messy. I had to write custom regex handlers to clean up the garbage data extracted from heavily formatted resumes before passing it to the logic layer.",
+      outcome: "Live app with a working end-to-end pipeline: upload → parse → job-specific feedback, backed by MongoDB and deployed consistently via Docker Compose."
     },
     purplebot: {
       problem: "Most chat assistants only do one thing — either conversation or live info — forcing the user to switch tools or specify a mode.",
-      approach: "Combined Google's Gemini API for open-ended conversation with the GNews API for real-time headlines from 50+ sources, then wrote a custom intent-parsing layer in the React UI that automatically routes each message to the right API based on what's being asked.",
-      outcome: "A single chat interface that handles both casual conversation and 'what's happening right now' queries without the user needing to pick a mode."
+      approach: "Combined Google's Gemini API for open-ended conversation with the GNews API for real-time headlines from 50+ sources.",
+      hurdle: "I needed a way to route the user's prompt to the correct API without wasting expensive LLM tokens just to check intent. I wrote a proprietary parsing algorithm to intercept and classify the request locally first.",
+      outcome: "A single chat interface that handles both casual conversation and 'what's happening right now' queries smoothly."
     },
     smartrental: {
       problem: "Rental businesses need to anticipate demand and catch unusual booking patterns early, not react to them after the fact.",
-      approach: "Built a Flask backend with a proper data science pipeline — scikit-learn and Prophet for demand forecasting, plus anomaly detection on booking data — powering a React frontend that turns the model output into something usable.",
+      approach: "Built a Flask backend with a proper data science pipeline—scikit-learn and Prophet for demand forecasting, plus anomaly detection on booking data.",
+      hurdle: "Handling sparse booking data during off-seasons threw off the Prophet model's seasonality metrics. I had to implement data smoothing techniques before feeding it into the TensorFlow pipeline.",
       outcome: "Full-stack app where the frontend visualizes forecasts and anomalies live with Recharts and maps listings geographically with React-Leaflet."
     },
     f1telemetry: {
       problem: "Static specs and exploded diagrams don't really convey how an F1 car's components fit together in 3D space, or what each part actually does.",
-      approach: "Built a real-time 3D F1 car model with React Three Fiber, with orbit and scale controls plus an interactive exploded-view slider. Individual parts — front wing, halo, sidepods, suspension — are selectable and surface technical descriptions and specs on click. Custom HTML overlays are scaled to canvas depth so labels track the 3D geometry instead of breaking the layout.",
-      outcome: "An explorable 3D dashboard with camera controls and canvas styling tuned specifically for studying the car's structure, not just looking at a render of it."
+      approach: "Built a real-time 3D F1 car model with React Three Fiber, featuring orbit controls, an interactive exploded-view slider, and selectable components.",
+      hurdle: "Syncing 2D DOM text elements to a moving 3D WebGL canvas was a nightmare. I spent days fighting z-index and camera scaling issues before figuring out how to dynamically project the 3D coordinates to the 2D screen space without tanking the framerate.",
+      outcome: "An explorable 3D dashboard with camera controls and canvas styling tuned specifically for studying the car's structure."
+    },
+    cloudburst: {
+      problem: "Predicting cloudbursts in highly vulnerable mountainous regions like Himachal Pradesh is exceptionally difficult due to the sudden, highly localized nature of these extreme weather events.",
+      approach: "Sourced and processed 10 years of raw geospatial meteorological data (2013–2023) using Google Earth Engine. Architected a hybrid deep learning pipeline that uses Conv1D layers to extract spatial features from the climate data, feeding into LSTM networks to analyze the time-series dependencies.",
+      hurdle: "Aligning massive volumes of multi-dimensional satellite data into perfect temporal sequences for the LSTM was a major bottleneck. I had to write custom preprocessing scripts to clean, normalize, and window the datasets without exhausting system memory during training.",
+      outcome: "A trained hybrid neural network capable of identifying historical precursor patterns to cloudbursts, proving the viability of combining spatial and temporal deep learning models for extreme weather forecasting.<br><br><span style='color: var(--amber);'><em>* <b>Status:</b> The formal research paper detailing this methodology is currently in progress of being published.</em></span>"
     }
   };
 
@@ -341,22 +355,30 @@
     var key = card.dataset.project;
     var d = projectDetails[key];
     if (!d || !modalBody) return;
-    var titleEl = card.querySelector('h3');
-    var stackEl = card.querySelector('.stack');
+
+    var titleEl = card.querySelector('h3, h4');
+    var stackEl = card.querySelector('.stack, .lab-tech');
     var title = titleEl ? titleEl.textContent : 'Project';
     var stack = stackEl ? stackEl.textContent : '';
+
     var links = Array.prototype.slice.call(card.querySelectorAll('.card-links a')).map(function (a) {
       return '<a href="' + a.getAttribute('href') + '" target="_blank" rel="noopener">' + a.textContent + '</a>';
     }).join('');
+
+    var hurdleHtml = d.hurdle ? '<div class="modal-section"><div class="modal-label">// the hurdle</div><p>' + d.hurdle + '</p></div>' : '';
+
     modalBody.innerHTML =
       '<h3>' + title + '</h3>' +
       '<div class="modal-stack">' + stack + '</div>' +
       '<div class="modal-section"><div class="modal-label">// problem</div><p>' + d.problem + '</p></div>' +
       '<div class="modal-section"><div class="modal-label">// approach</div><p>' + d.approach + '</p></div>' +
+      hurdleHtml +
       '<div class="modal-section"><div class="modal-label">// outcome</div><p>' + d.outcome + '</p></div>' +
       '<div class="modal-links">' + links + '</div>';
+
     projectModal.classList.add('open');
   }
+
   function closeProjectModal() { if (projectModal) projectModal.classList.remove('open'); }
 
   document.querySelectorAll('[data-project]').forEach(function (card) {
